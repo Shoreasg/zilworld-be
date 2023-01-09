@@ -6,10 +6,10 @@ dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT||8000;
 const DATABASE=process.env.DATABASE;
-const MONGO_USER=process.env.USER;
+const MONGO_USER=process.env.MONGO_USER;
 const MONGO_PASSWORD=process.env.PASSWORD;
 const MONGO_BASE_URL=process.env.BASE_URL;
-const MONGO_URL=`mongodb+srv://admin:G%40nWe1Lun%4094@shoreasg-cluster.7qwwc.mongodb.net/ZilWorld`
+const MONGO_URL=`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_BASE_URL}/${DATABASE}`
 
 mongoose.set('strictQuery', true);
 mongoose.connect(MONGO_URL).then(()=>{
