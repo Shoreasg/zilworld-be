@@ -1,7 +1,7 @@
 import express, { Express} from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-
+import tokensController from './controller/tokensController';
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT||8000;
@@ -12,6 +12,9 @@ const MONGO_BASE_URL=process.env.BASE_URL;
 const MONGO_URL=`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_BASE_URL}/${DATABASE}`
 
 mongoose.set('strictQuery', true);
+
+app.use(tokensController)
+
 mongoose.connect(MONGO_URL).then(()=>{
   console.log('database connected')
   app.listen(PORT, () => { console.log('listening on', PORT) });
