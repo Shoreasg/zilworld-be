@@ -30,6 +30,7 @@ const tokensSchema = new Schema({
     telegram: {type:String},
     twitter: {type:String},
     discord: {type:String},
+    marketdata: marketDataSchema
 });
 
 export default mongoose.model('Tokens', tokensSchema);
