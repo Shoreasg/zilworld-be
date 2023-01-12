@@ -50,7 +50,7 @@ const updateMarketData = async () => {
 const task = cron.schedule('*/5 * * * *', () => {
     updateMarketData()
     console.log('Update marketData every 5 minutes');
-});
+}, { scheduled: false });
 
 
 router.post("/seedtoken", async (req: Request, res: Response) => { //seed data from zilstream
@@ -63,7 +63,7 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
             const tokensToSave = tokens.map((token: ITokens) => {
                 return {
                     name: token.name,
-                    updated_at: "",
+                    updated_at: moment.tz("Asia/Manila").format(),
                     symbol: token.symbol,
                     address: token.address,
                     icon: token.icon,
@@ -88,7 +88,7 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
                         daily_volume_usd: token.market_data.daily_volume_usd,
                         market_cap_usd: token.market_data.market_cap_usd,
                         fully_diluted_marketcap_usd: token.market_data.fully_diluted_valuation_usd,
-                        updated_at: ""
+                        updated_at: moment.tz("Asia/Manila").format()
                     }
                 }
             })
@@ -98,6 +98,85 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
 
         } catch (error) {
             res.status(500).json({ Error: "Error getting response from external API" })
+        }
+    }
+    else {
+        res.status(401).json({ Error: "Unauthorized" });
+    }
+})
+
+router.get("/tokens", async (req: Request, res: Response) => { // get all tokens
+
+    try {
+        const getTokens = await Tokens.find({});
+        if (getTokens.length > 0) {
+            return res.status(200).json({ data: getTokens });
+
+        } else {
+            return res.status(200).json({ data: "No tokens found" });
+        }
+    } catch (error) {
+        res.status(500).json({ Error: "Error retriving tokens" })
+    }
+
+})
+
+router.get("/tokens/:tokenAddress", async (req: Request, res: Response) => { // get 1 token
+    try {
+        const getToken = await Tokens.findOne({ address: req.params.tokenAddress });
+        if (getToken) {
+            return res.status(200).json({ data: getToken });
+
+        }
+        else {
+            return res.status(200).json({ data: "No token found" });
+        }
+    } catch (error) {
+        res.status(500).json({ Error: "Error retriving token" })
+    }
+
+})
+
+router.put("/update/tokens/:tokenAddress", async (req: Request, res: Response) => { // update details
+    const authorization = req.headers.authorization;
+    if (authorization === process.env.APIKEY) {
+        try {
+            const findTokenAndUpdate = await Tokens.findOneAndUpdate({ address: req.params.tokenAddress },
+                {
+                    $set: req.body,
+                    updated_at: moment.tz("Asia/Manila").format(),
+                })
+            if (findTokenAndUpdate) {
+                return res.status(200).json({ Success: `${findTokenAndUpdate.name} updated successfully` });
+            }
+            else {
+                return res.status(200).json({ data: "No token found, unable to update" });
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ Error: "Error updating token details" })
+        }
+    }
+    else {
+        res.status(401).json({ Error: "Unauthorized" });
+    }
+})
+
+router.delete("/delete/tokens/:tokenAddress", async (req: Request, res: Response) => { // update details
+    const authorization = req.headers.authorization;
+    if (authorization === process.env.APIKEY) {
+        try {
+            const findTokenAndDelete = await Tokens.findOneAndDelete({ address: req.params.tokenAddress });
+
+            if (findTokenAndDelete) {
+                return res.status(200).json({ Success: `${findTokenAndDelete.name} deleted successfully` });
+            }
+            else {
+                return res.status(200).json({ data: "No token found, unable to delete" });
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ Error: "Error deleting token" })
         }
     }
     else {

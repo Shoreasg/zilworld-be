@@ -15,6 +15,7 @@ let server: http.Server;
 
 mongoose.set('strictQuery', true);
 
+app.use(express.json());
 app.use(tokensController)
 
 mongoose.connect(MONGO_URL).then(() => {
