@@ -17,10 +17,12 @@ const marketDataSchema = new Schema({
     daily_volume_usd:{type: Number, required: true},
     market_cap_usd:{type: Number, required: true},
     fully_diluted_marketcap_usd:{type: Number, required: true},
+    updated_at:{type: String}
 })
 
 const tokensSchema = new Schema({
     name: {type:String, required: true},
+    updated_at:{type: String},
     symbol: {type: String, required: true},
     address: {type: String, required: true},
     icon: {type: String, required: true},
