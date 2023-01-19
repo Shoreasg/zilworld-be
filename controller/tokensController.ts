@@ -4,6 +4,7 @@ import moment from 'moment-timezone'
 import axios from 'axios'
 import cron from 'node-cron';
 import { ITokens } from '../types/types';
+import Chart from '../models/chart';
 const router: Router = Router();
 
 
@@ -70,6 +71,7 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
                     decimals: token.decimals,
                     description: "",
                     website: token.website,
+                    twitter: "",
                     telegram: token.telegram,
                     discord: token.discord,
                     marketdata: {
@@ -183,8 +185,6 @@ router.delete("/delete/tokens/:tokenAddress", async (req: Request, res: Response
         res.status(401).json({ Error: "Unauthorized" });
     }
 })
-
-
 
 export default router
 export { task }

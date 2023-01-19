@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import http from 'http';
 import mongoose from 'mongoose';
 import tokensController, {task} from './controller/tokensController';
+import chartController from './controller/chartController';
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 8000;
@@ -17,6 +18,7 @@ mongoose.set('strictQuery', true);
 
 app.use(express.json());
 app.use(tokensController)
+app.use(chartController)
 
 mongoose.connect(MONGO_URL).then(() => {
   console.log('database connected')
