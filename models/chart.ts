@@ -7,6 +7,7 @@ const chartDataSchema = new Schema({
 
 const chartSchema = new Schema({
     address: {type:String,required: true},
+    updated_at: {type: String},
     dataset: [chartDataSchema]
 })
 
