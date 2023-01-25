@@ -17,7 +17,7 @@ const updateChartData = async () =>
             {
          
                 const response = await axios.get(`https://io-cdn.zilstream.com/chart/aggr/${token.address}`);
-                const chartData = response.data;
+                const chartData:[] = response.data;
                  await Chart.findOneAndUpdate({
                     address: token.address
                 },{
