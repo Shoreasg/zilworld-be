@@ -4,6 +4,8 @@ import moment from 'moment-timezone'
 import axios from 'axios'
 import cron from 'node-cron';
 import { ITokens } from '../types/types';
+import Chart from '../models/chart';
+import { authMiddleWare } from '../middleware/auth';
 const router: Router = Router();
 
 
@@ -47,15 +49,13 @@ const updateMarketData = async () => {
     }
 }
 
-const task = cron.schedule('*/5 * * * *', () => {
+const tokenDataTask = cron.schedule('*/5 * * * *', () => {
     updateMarketData()
     console.log('Update marketData every 5 minutes');
 }, { scheduled: false });
 
 
-router.post("/seedtoken", async (req: Request, res: Response) => { //seed data from zilstream
-    const authorization = req.headers.authorization;
-    if (authorization === process.env.APIKEY) {
+router.post("/seedtoken",authMiddleWare, async (req: Request, res: Response) => { //seed data from zilstream
         try {
 
             const response = await axios.get(`${process.env.ZILSTREAM_URL}`);
@@ -70,6 +70,7 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
                     decimals: token.decimals,
                     description: "",
                     website: token.website,
+                    twitter: "",
                     telegram: token.telegram,
                     discord: token.discord,
                     marketdata: {
@@ -99,10 +100,6 @@ router.post("/seedtoken", async (req: Request, res: Response) => { //seed data f
         } catch (error) {
             res.status(500).json({ Error: "Error getting response from external API" })
         }
-    }
-    else {
-        res.status(401).json({ Error: "Unauthorized" });
-    }
 })
 
 router.get("/tokens", async (req: Request, res: Response) => { // get all tokens
@@ -137,9 +134,8 @@ router.get("/tokens/:tokenAddress", async (req: Request, res: Response) => { // 
 
 })
 
-router.put("/update/tokens/:tokenAddress", async (req: Request, res: Response) => { // update details
-    const authorization = req.headers.authorization;
-    if (authorization === process.env.APIKEY) {
+router.put("/update/tokens/:tokenAddress", authMiddleWare, async (req: Request, res: Response) => { // update details
+
         try {
             const findTokenAndUpdate = await Tokens.findOneAndUpdate({ address: req.params.tokenAddress },
                 {
@@ -156,15 +152,9 @@ router.put("/update/tokens/:tokenAddress", async (req: Request, res: Response) =
             console.log(error)
             res.status(500).json({ Error: "Error updating token details" })
         }
-    }
-    else {
-        res.status(401).json({ Error: "Unauthorized" });
-    }
 })
 
-router.delete("/delete/tokens/:tokenAddress", async (req: Request, res: Response) => { // update details
-    const authorization = req.headers.authorization;
-    if (authorization === process.env.APIKEY) {
+router.delete("/delete/tokens/:tokenAddress", authMiddleWare, async (req: Request, res: Response) => { // update details
         try {
             const findTokenAndDelete = await Tokens.findOneAndDelete({ address: req.params.tokenAddress });
 
@@ -178,13 +168,7 @@ router.delete("/delete/tokens/:tokenAddress", async (req: Request, res: Response
             console.log(error)
             res.status(500).json({ Error: "Error deleting token" })
         }
-    }
-    else {
-        res.status(401).json({ Error: "Unauthorized" });
-    }
 })
 
-
-
 export default router
-export { task }
+export { tokenDataTask }

@@ -2,7 +2,8 @@ import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
 import mongoose from 'mongoose';
-import tokensController, {task} from './controller/tokensController';
+import tokensController, {tokenDataTask} from './controller/tokensController';
+import chartController, { chartTask } from './controller/chartController';
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 8000;
@@ -17,11 +18,13 @@ mongoose.set('strictQuery', true);
 
 app.use(express.json());
 app.use(tokensController)
+app.use(chartController)
 
 mongoose.connect(MONGO_URL).then(() => {
   console.log('database connected')
   server = app.listen(PORT, () => { console.log('listening on', PORT) });
-  task.start();
+  // tokenDataTask.start();
+  // chartTask.start();
   console.log("Job started");
 })
 
@@ -29,14 +32,16 @@ process.on('SIGINT', () => {
   console.log('Received SIGINT. Exiting.');
   mongoose.disconnect()
   console.log('disconnected mongoose');
-  task.stop()
+  tokenDataTask.stop()
+  chartTask.stop()
   console.log('shut down cron');
   process.exit();
 });
 
 app.on('close', () => {
   console.log("Server is closed!")
-  task.stop()
+  tokenDataTask.stop()
+  chartTask.stop()
   console.log('shut down cron');
   mongoose.disconnect()
   console.log('disconnected mongoose');
@@ -44,7 +49,8 @@ app.on('close', () => {
 
 mongoose.connection.on('error', (err) => {
   console.log(`Mongoose default connection error: ${err}`);
-  task.stop()
+  tokenDataTask.stop()
+  chartTask.stop()
   console.log('shut down cron');
   server.close(() => {
     console.log('Http server closed');
