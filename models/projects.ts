@@ -9,6 +9,7 @@ const projectsSchema = new Schema({
     updated_at:{type: String},
     category:{type:String, required: true},
     tokens:[{type:String}],
+    NFT_address:[{type:String}],
     marketplace_arky:{type: Boolean},
     marketplace_zildex:{type: Boolean},
     marketplace_cathulu:{type: Boolean},
