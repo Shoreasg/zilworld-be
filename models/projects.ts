@@ -12,7 +12,6 @@ const projectsSchema = new Schema({
     marketplace_arky:{type: Boolean},
     marketplace_zildex:{type: Boolean},
     marketplace_cathulu:{type: Boolean},
-    contract_address: {type: String},
     website: {type:String},
     telegram: {type:String},
     twitter: {type:String},

@@ -25,8 +25,8 @@ router.get("/projects", async(req: Request, res:Response)=>{
 
 router.get("/projects/:name", async(req: Request, res:Response)=>{
     try {
-        const projects = await Projects.find({name:req.params.name});
-        if(projects.length > 0)
+        const projects = await Projects.findOne({name:req.params.name});
+        if(projects)
         {
             return res.status(200).json({ data: projects });
         }
