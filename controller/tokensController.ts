@@ -4,7 +4,6 @@ import moment from 'moment-timezone'
 import axios from 'axios'
 import cron from 'node-cron';
 import { ITokens } from '../types/types';
-import Chart from '../models/chart';
 import { authMiddleWare } from '../middleware/auth';
 const router: Router = Router();
 
@@ -149,7 +148,6 @@ router.put("/update/tokens/:tokenAddress", authMiddleWare, async (req: Request, 
                 return res.status(200).json({ data: "No token found, unable to update" });
             }
         } catch (error) {
-            console.log(error)
             res.status(500).json({ Error: "Error updating token details" })
         }
 })
@@ -165,7 +163,6 @@ router.delete("/delete/tokens/:tokenAddress", authMiddleWare, async (req: Reques
                 return res.status(200).json({ data: "No token found, unable to delete" });
             }
         } catch (error) {
-            console.log(error)
             res.status(500).json({ Error: "Error deleting token" })
         }
 })

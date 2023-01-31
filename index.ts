@@ -1,11 +1,14 @@
 import express, { Express } from 'express';
+import cors from "cors"
 import dotenv from 'dotenv';
 import http from 'http';
 import mongoose from 'mongoose';
 import tokensController, {tokenDataTask} from './controller/tokensController';
 import chartController, { chartTask } from './controller/chartController';
+import projectController from './controller/projectController';
 dotenv.config();
 const app: Express = express();
+app.use(cors({ origin: process.env.FRONTEND_URL, methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'], credentials: true }));
 const PORT = process.env.PORT || 8000;
 const DATABASE = process.env.DATABASE;
 const MONGO_USER = process.env.MONGO_USER;
@@ -17,14 +20,16 @@ let server: http.Server;
 mongoose.set('strictQuery', true);
 
 app.use(express.json());
+app.enable('trust proxy');
 app.use(tokensController)
 app.use(chartController)
+app.use(projectController)
 
 mongoose.connect(MONGO_URL).then(() => {
   console.log('database connected')
   server = app.listen(PORT, () => { console.log('listening on', PORT) });
-  // tokenDataTask.start();
-  // chartTask.start();
+  tokenDataTask.start();
+  chartTask.start();
   console.log("Job started");
 })
 
