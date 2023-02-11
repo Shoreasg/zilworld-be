@@ -6,6 +6,33 @@ const router: Router = Router();
 
 
 
+const updateCategorySchema = async () => {
+    try {
+      const projects = await Projects.find({});
+      projects.forEach(async project => {
+        const newCategory = [project.category.toString()];
+        await Projects.updateOne({ _id: project._id }, { $set: { category: newCategory } });
+      });
+      console.log("Schema updated successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  updateCategorySchema();
+
+  const updateSchema = async () =>
+  {
+    try {
+        await Projects.updateMany({}, { $set: {isActive: true, isBuilding: false, isNew: false} });
+        console.log("Schema updated successfully");
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+  updateSchema();
+
 router.get("/projects", async(req: Request, res:Response)=>{
     try {
         const projects = await Projects.find({});
