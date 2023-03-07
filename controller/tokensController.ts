@@ -101,6 +101,20 @@ router.post("/seedtoken",authMiddleWare, async (req: Request, res: Response) => 
         }
 })
 
+router.post("/newToken/create",authMiddleWare, async(req: Request, res:Response)=>{
+    try {
+        const newTokens = await Tokens.create({
+            ...req.body,
+            updated_at: moment.tz("Asia/Manila").format()
+        })
+
+        return res.status(200).json({ Success: `${newTokens.name} created successfully` });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ Error: "Error creating new token" })
+    }
+})
+
 router.get("/tokens", async (req: Request, res: Response) => { // get all tokens
 
     try {
