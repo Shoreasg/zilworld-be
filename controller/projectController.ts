@@ -5,33 +5,37 @@ import Projects from '../models/projects';
 const router: Router = Router();
 
 
+//This script is to update the schema with array category
 
-const updateCategorySchema = async () => {
-    try {
-      const projects = await Projects.find({});
-      projects.forEach(async project => {
-        const newCategory = [project.category.toString()];
-        await Projects.updateOne({ _id: project._id }, { $set: { category: newCategory } });
-      });
-      console.log("Schema updated successfully");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+// const updateCategorySchema = async () => {
+//     try {
+//       const projects = await Projects.find({});
+//       projects.forEach(async project => {
+//         const newCategory = [project.category.toString()];
+//         await Projects.updateOne({ _id: project._id }, { $set: { category: newCategory } });
+//       });
+//       console.log("Schema updated successfully");
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
   
-  updateCategorySchema();
+//   updateCategorySchema();
 
-  const updateSchema = async () =>
-  {
-    try {
-        await Projects.updateMany({}, { $set: {isActive: true, isBuilding: false, isNew: false} });
-        console.log("Schema updated successfully");
-      } catch (error) {
-        console.error(error);
-      }
-  }
 
-  updateSchema();
+// This script is to update the schema with additional parameters which is isActive, isBuilding and isNew
+
+//   const updateSchema = async () =>
+//   {
+//     try {
+//         await Projects.updateMany({}, { $set: {isActive: true, isBuilding: false, isNew: false} });
+//         console.log("Schema updated successfully");
+//       } catch (error) {
+//         console.error(error);
+//       }
+//   }
+
+//   updateSchema();
 
 router.get("/projects", async(req: Request, res:Response)=>{
     try {
