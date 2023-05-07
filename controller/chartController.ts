@@ -69,6 +69,22 @@ router.post("/token/seedChart",authMiddleWare, async (req: Request, res: Respons
         }
 })
 
+router.post("/chart/:tokenAddress", authMiddleWare, async (req: Request, res: Response) => {
+    try {
+        const response = await axios.get(`https://io-cdn.zilstream.com/chart/aggr/${req.params.tokenAddress}`);
+        const chartData = response.data;
+        const chart = new Chart({
+            address: req.params.tokenAddress,
+            updated_at: moment.tz("Asia/Manila").format(),
+            dataset: chartData
+        });
+        await chart.save();
+        res.send({ Success: "Chart data created successfully" })
+    } catch (error) {
+        res.status(500).json({ Error: "Error getting response from external API" })
+    }
+})
+
 router.get("/chart/:tokenAddress", async(req: Request, res: Response)=>{
     try{
         const getChart = await Chart.findOne({address: req.params.tokenAddress})
