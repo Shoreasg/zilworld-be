@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import tokensController, {tokenDataTask} from './controller/tokensController';
 import chartController, { chartTask } from './controller/chartController';
 import projectController from './controller/projectController';
+import projectCategoriesController from './controller/projectCategoriesController';
 dotenv.config();
 const app: Express = express();
 app.use(cors({ origin: process.env.FRONTEND_URL, methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'], credentials: true }));
@@ -24,6 +25,7 @@ app.enable('trust proxy');
 app.use(tokensController)
 app.use(chartController)
 app.use(projectController)
+app.use(projectCategoriesController)
 
 mongoose.connect(MONGO_URL).then(() => {
   console.log('database connected')
