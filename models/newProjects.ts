@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const announcementSchema = new Schema({
   title: { type: String, required: true },
   preview: { type: String, required: true },
+  pinned: {type: Boolean, required: true}
 });
 
 const tokenSchema = new Schema({
