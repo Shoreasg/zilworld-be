@@ -194,6 +194,55 @@ router.put(
   }
 );
 
+router.put(
+  "/projects/update/announcement/:name",
+  authMiddleWare,
+  async (req: Request, res: Response) => {
+    try {
+      const {title, preview, pinned} = req.body;
+
+      if (!title || !preview || pinned === undefined) {
+        return res.status(400).json({ Error: "All fields (title, preview, pinned) are required" });
+      }
+
+      const project = await newProjects.findOne({name: req.params.name});
+
+      if(!project){
+        return res.status(404).json({ Error: "Project not found" }); 
+      }
+
+        // Find the announcement index
+        const announcementIndex = project.announcements.findIndex(a => a.title === title);
+        const currentTime = moment.tz("Asia/Manila").format();
+
+        if (announcementIndex !== -1) {
+          // Update existing announcement
+          project.announcements[announcementIndex].title = title;
+          project.announcements[announcementIndex].preview = preview;
+          project.announcements[announcementIndex].pinned = pinned;
+          project.announcements[announcementIndex].updated_at = currentTime;
+        } else {
+          // Add new announcement
+          project.announcements.push({
+            title,
+            preview,
+            pinned,
+            created_at: currentTime,
+            updated_at: currentTime
+          });
+        }
+  
+        await project.save();
+  
+        res.status(200).json({ Success: `${req.params.name} announcement updated successfully` });
+
+
+    } catch (error) {
+      res.status(500).json({ Error: "Error updating project" });
+    }
+  }
+);
+
 router.delete(
   "/projects/delete/:name",
   authMiddleWare,
