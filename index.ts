@@ -7,6 +7,7 @@ import tokensController, { tokenDataTask } from "./controller/tokensController";
 import chartController, { chartTask } from "./controller/chartController";
 import projectController from "./controller/projectController";
 import projectCategoriesController from "./controller/projectCategoriesController";
+import helmet from "helmet";
 dotenv.config();
 const app: Express = express();
 app.use(
@@ -27,6 +28,7 @@ let server: http.Server;
 mongoose.set("strictQuery", true);
 
 app.use(express.json());
+app.use(helmet())
 app.enable("trust proxy");
 app.use(tokensController);
 app.use(chartController);
@@ -38,8 +40,8 @@ mongoose.connect(MONGO_URL).then(() => {
   server = app.listen(PORT, () => {
     console.log("listening on", PORT);
   });
-  tokenDataTask.start();
-  chartTask.start();
+  // tokenDataTask.start();
+  // chartTask.start();
   console.log("Job started");
 });
 

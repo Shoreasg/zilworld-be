@@ -36,7 +36,7 @@ const updateMarketData = async () => {
                         updated_at: moment.tz("Asia/Manila").format()
                     }
                 }
-            }).exec((error) => {
+            }).catch((error) => {
                 if (error) {
                     console.log(error)
                 }

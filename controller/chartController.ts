@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express'
 import Tokens from '../models/tokens'
-import axios from 'axios'
 import Chart from '../models/chart';
 import cron from 'node-cron';
 import moment from 'moment-timezone';
 import { authMiddleWare } from '../middleware/auth';
+import axios from 'axios';
 const router: Router = Router();
 
 
@@ -25,7 +25,7 @@ const updateChartData = async () =>
                         updated_at: moment.tz("Asia/Manila").format(),
                         dataset: chartData
                     }
-                }).exec((error)=>
+                }).catch((error)=>
                 {
                     if(error)
                     {
