@@ -5,87 +5,87 @@ import Projects from "../models/projects";
 import newProjects from "../models/newProjects";
 const router: Router = Router();
 
-const updateTokensSchema = async () => {
-  try {
-    const projects = await Projects.find({});
+// const updateTokensSchema = async () => {
+//   try {
+//     const projects = await Projects.find({});
 
-    for (const project of projects) {
-      const oldTokens = project.tokens.map((oldToken) => ({
-        tokenAddress: oldToken ? oldToken : "",
-        zilworldURL: "",
-        tokenCategory: "",
-        tokenLogo: "",
-      }));
+//     for (const project of projects) {
+//       const oldTokens = project.tokens.map((oldToken) => ({
+//         tokenAddress: oldToken ? oldToken : "",
+//         zilworldURL: "",
+//         tokenCategory: "",
+//         tokenLogo: "",
+//       }));
 
-      const newProject = new newProjects({
-        name: project.name,
-        description: project.description,
-        announcements: project.announcements,
-        icon: project.icon,
-        updated_at: project.updated_at,
-        category: project.category,
-        tokens: [...oldTokens],
-        NFT_address: project.NFT_address,
-        marketplace_arky: project.marketplace_arky,
-        marketplace_zildex: project.marketplace_zildex,
-        marketplace_cathulu: project.marketplace_cathulu,
-        website: project.website ? [{ websiteURL: project.website }] : undefined,
-        telegram: project.telegram ? [{ telegramURL: project.telegram }] : undefined,
-        discord: project.discord ? [{ discordURL: project.discord }] : undefined,
-        viewblock: [],
-        whitepaper: [],
-        github: [],
-        medium: [],
-        linkedin: [],
-        youtube: [],
-        reddit: [],
-        facebook: [],
-        related: [],
-        isActive: project.isActive,
-        isBuilding: project.isBuilding,
-        isNew: project.isNew,
-      });
+//       const newProject = new newProjects({
+//         name: project.name,
+//         description: project.description,
+//         announcements: project.announcements,
+//         icon: project.icon,
+//         updated_at: project.updated_at,
+//         category: project.category,
+//         tokens: [...oldTokens],
+//         NFT_address: project.NFT_address,
+//         marketplace_arky: project.marketplace_arky,
+//         marketplace_zildex: project.marketplace_zildex,
+//         marketplace_cathulu: project.marketplace_cathulu,
+//         website: project.website ? [{ websiteURL: project.website }] : undefined,
+//         telegram: project.telegram ? [{ telegramURL: project.telegram }] : undefined,
+//         discord: project.discord ? [{ discordURL: project.discord }] : undefined,
+//         viewblock: [],
+//         whitepaper: [],
+//         github: [],
+//         medium: [],
+//         linkedin: [],
+//         youtube: [],
+//         reddit: [],
+//         facebook: [],
+//         related: [],
+//         isActive: project.isActive,
+//         isBuilding: project.isBuilding,
+//         isNew: project.isNew,
+//       });
 
-      await newProject.save();
-    }
-    console.log("Schema updated successfully");
-  } catch (error) {
-    console.error(error);
-  }
-};
+//       await newProject.save();
+//     }
+//     console.log("Schema updated successfully");
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-updateTokensSchema();
+// updateTokensSchema();
 
 //This script is to update the schema with array category
 
-const updateCategorySchema = async () => {
-    try {
-      const projects = await Projects.find({});
-      projects.forEach(async project => {
-        const newCategory = [project.category.toString()];
-        await Projects.updateOne({ _id: project._id }, { $set: { category: newCategory } });
-      });
-      console.log("Schema updated successfully");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+// const updateCategorySchema = async () => {
+//     try {
+//       const projects = await Projects.find({});
+//       projects.forEach(async project => {
+//         const newCategory = [project.category.toString()];
+//         await Projects.updateOne({ _id: project._id }, { $set: { category: newCategory } });
+//       });
+//       console.log("Schema updated successfully");
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
 
-  updateCategorySchema();
+//   updateCategorySchema();
 
 // This script is to update the schema with additional parameters which is isActive, isBuilding and isNew
 
-  const updateSchema = async () =>
-  {
-    try {
-        await Projects.updateMany({}, { $set: {isActive: true, isBuilding: false, isNew: false} });
-        console.log("Schema updated successfully");
-      } catch (error) {
-        console.error(error);
-      }
-  }
+  // const updateSchema = async () =>
+  // {
+  //   try {
+  //       await Projects.updateMany({}, { $set: {isActive: true, isBuilding: false, isNew: false} });
+  //       console.log("Schema updated successfully");
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  // }
 
-  updateSchema();
+  // updateSchema();
 
 // update announcement schema script
 
