@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express'
 import ProjectCategories from '../models/projectCategories';
 import { authMiddleWare } from '../middleware/auth';
 import Projects from '../models/projects';
+import { limitMiddleWare } from '../middleware/rateLimit';
 
 const router: Router = Router();
 
@@ -36,7 +37,7 @@ router.post("/ProjectCategories/create",authMiddleWare, async(req: Request, res:
     }
 })
 
-router.put("/ProjectCategories/update", authMiddleWare, async(req:Request , res:Response)=>{
+router.put("/ProjectCategories/update", limitMiddleWare, async(req:Request , res:Response)=>{
     try {
 
         const updateClicks = await ProjectCategories.findOneAndUpdate({name: req.body.name},{
