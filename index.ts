@@ -29,7 +29,7 @@ mongoose.set("strictQuery", true);
 
 app.use(express.json());
 app.use(helmet())
-app.enable("trust proxy");
+// app.enable("trust proxy");
 app.use(tokensController);
 app.use(chartController);
 app.use(projectController);
