@@ -3,6 +3,7 @@ import moment from "moment-timezone";
 import { authMiddleWare } from "../middleware/auth";
 import Projects from "../models/projects";
 import newProjects from "../models/newProjects";
+import axios from "axios";
 const router: Router = Router();
 
 // const updateTokensSchema = async () => {
@@ -149,6 +150,24 @@ router.get("/projects/:name", async (req: Request, res: Response) => {
     res.status(500).json({ Error: "Error retriving projects" });
   }
 });
+
+// router.get("/projects/latestNews/getTweets",async (req: Request, res: Response)=>{
+//   try {
+//     const listId = req.params.listid
+//     const response = await axios.get(
+//       `https://api.twitter.com/2/lists/1815050769437168027/tweets`,
+//       {
+//         headers:{
+//           Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
+//         }
+//       }
+//     );
+//     res.json(response.data);
+//   } catch (error) {
+//     console.error("Error fetching tweets:", error);
+//     res.status(500).send("Error fetching tweets");
+//   }
+// })
 
 router.post(
   "/projects/create",
