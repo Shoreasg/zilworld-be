@@ -89,40 +89,40 @@ const router: Router = Router();
 
 // update announcement schema script
 
-const updateAnnouncementSchema = async () => {
-  try {
-    const projects = await newProjects.find({});
-    if (projects.length === 0) {
-      console.log("No projects found");
-      return;
-    }
+// const updateAnnouncementSchema = async () => {
+//   try {
+//     const projects = await newProjects.find({});
+//     if (projects.length === 0) {
+//       console.log("No projects found");
+//       return;
+//     }
 
-    console.log(`Found ${projects.length} projects`);
+//     console.log(`Found ${projects.length} projects`);
 
-    for (const project of projects) {
-      let updated = false;
-      for (const announcement of project.announcements) {
-        if (announcement.pinned === undefined) {
-          announcement.pinned = false;
-          updated = true;
-        }
-      }
+//     for (const project of projects) {
+//       let updated = false;
+//       for (const announcement of project.announcements) {
+//         if (announcement.pinned === undefined) {
+//           announcement.pinned = false;
+//           updated = true;
+//         }
+//       }
 
-      if (updated) {
-        await project.save();
-        console.log(`Updated project with id: ${project._id}`);
-      } else {
-        console.log(`No updates needed for project with id: ${project._id}`);
-      }
-    }
+//       if (updated) {
+//         await project.save();
+//         console.log(`Updated project with id: ${project._id}`);
+//       } else {
+//         console.log(`No updates needed for project with id: ${project._id}`);
+//       }
+//     }
 
-    console.log("Schema updated successfully");
-  } catch (error) {
-    console.error(error);
-  }
-};
+//     console.log("Schema updated successfully");
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
-updateAnnouncementSchema();
+// updateAnnouncementSchema();
 
 router.get("/projects", async (req: Request, res: Response) => {
   try {
